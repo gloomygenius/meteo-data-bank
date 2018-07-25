@@ -1,1 +1,3 @@
 rootProject.name = 'meteo-data-bank'
+include 'rest-service'
+include 'web-client'

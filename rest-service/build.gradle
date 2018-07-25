@@ -1,0 +1,61 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE')
+    }
+}
+
+plugins {
+    id 'net.ltgt.apt' version '0.10'
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+jar {
+    baseName = 'meteo-data-bank'
+    version = '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://artifacts.unidata.ucar.edu/repository/unidata-all/"
+    }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+def netCdfVersion = '4.6.11'
+def springfoxVersion = '2.9.+'
+
+dependencies {
+    compile 'org.flywaydb:flyway-core'
+    compile "edu.ucar:cdm:${netCdfVersion}"
+    //todo убрать транзитивные зависимости из библиотеки cdm
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-devtools'
+    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile 'org.springframework.boot:spring-boot-starter-jdbc'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'org.springframework.boot:spring-boot-starter-json'
+    compile 'org.springframework.boot:spring-boot-starter-webflux'
+    compile "io.springfox:springfox-swagger2:${springfoxVersion}"
+    compile "io.springfox:springfox-swagger-ui:${springfoxVersion}"
+    compile 'org.apache.httpcomponents:httpclient'
+    compile 'org.apache.commons:commons-lang3'
+    compile 'commons-io:commons-io:2.6'
+    runtime 'org.postgresql:postgresql'
+    compileOnly 'org.springframework.boot:spring-boot-configuration-processor'
+    compileOnly 'org.projectlombok:lombok:1.18.0'
+    apt "org.projectlombok:lombok:1.18.0"
+
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'org.springframework.security:spring-security-test'
+    testRuntime 'org.testcontainers:postgresql:1.8.+'
+    testCompileOnly 'org.projectlombok:lombok:1.18.0'
+}
