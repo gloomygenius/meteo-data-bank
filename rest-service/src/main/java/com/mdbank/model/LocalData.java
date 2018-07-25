@@ -1,11 +1,11 @@
 package com.mdbank.model;
 
 import com.mdbank.model.metadata.NetCdfParam;
+import com.mdbank.util.DateUtilsKt;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +15,11 @@ import static javax.persistence.GenerationType.SEQUENCE;
 
 @Data
 @NoArgsConstructor
-public class LocalData implements Serializable {
-    private static final long serialVersionUID = 9116546558503639478L;
+public class LocalData {
     @Id
     @Column(name = "local_data_id")
     @GeneratedValue(strategy = SEQUENCE, generator = "local_data_seq_gen")
-    @SequenceGenerator(name = "local_data_seq_gen", sequenceName = "local_data_local_data_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "local_data_seq_gen", sequenceName = "local_data_id_seq", allocationSize = 1)
     private Long id;
     @Enumerated(EnumType.STRING)
     private NetCdfParam parameter;
@@ -56,7 +55,7 @@ public class LocalData implements Serializable {
             throw new IllegalArgumentException("Ошибка при слиянии данных: разные года " + parameter.name() + " " + localData.parameter);
         }
 
-        int daysInYear = year.length() * 24;
+        int daysInYear = DateUtilsKt.hoursInYear(year) * 24;
 
         List<Float> floats = new ArrayList<>(daysInYear);
 

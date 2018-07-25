@@ -1,7 +1,7 @@
 package com.mdbank.model;
 
 import com.mdbank.model.metadata.NetCdfParam;
-import com.mdbank.util.TimeUtil;
+import com.mdbank.util.DateUtilsKt;
 import lombok.Data;
 
 import java.io.*;
@@ -103,7 +103,7 @@ public class GlobalData implements Serializable {
                 .map(ZonedDateTime::getYear)
                 .map(Year::of)
                 .orElseThrow(() -> new RuntimeException("Не определён год глобальных данных"));
-        Float[] floats = new Float[TimeUtil.hoursInYear(year)];
+        Float[] floats = new Float[DateUtilsKt.hoursInYear(year)];
 
         map.forEach((k, v) -> {
             ZonedDateTime utc1 = k.atZone(ZoneId.of("UTC"));

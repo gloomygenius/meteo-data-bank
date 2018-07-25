@@ -33,10 +33,7 @@ public class NetCdfProcessor {
     private final PositionService positionService;
 
     @Autowired
-    public NetCdfProcessor(@Value("${global_data.min_latitude}") double minLatitude,
-                           @Value("${global_data.max_latitude}") double maxLatitude,
-                           @Value("${global_data.min_longitude}") double minLongitude,
-                           @Value("${global_data.max_longitude}") double maxLongitude, PositionService positionService) {
+    public NetCdfProcessor(PositionService positionService) {
         this.positionService = positionService;
     }
 

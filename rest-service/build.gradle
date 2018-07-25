@@ -9,6 +9,7 @@ buildscript {
 
 plugins {
     id 'net.ltgt.apt' version '0.10'
+    id 'org.jetbrains.kotlin.jvm' version '1.2.51'
 }
 
 apply plugin: 'java'
@@ -58,4 +59,15 @@ dependencies {
     testCompile 'org.springframework.security:spring-security-test'
     testRuntime 'org.testcontainers:postgresql:1.8.+'
     testCompileOnly 'org.projectlombok:lombok:1.18.0'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
