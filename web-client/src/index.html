@@ -1,0 +1,32 @@
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,800">
+<div id="container">
+    <div id="hook"></div>
+    <h1>Play Music</h1>
+    <input type="file" id="files" name="files[]" multiple />
+</div>
+<script crossorigin src="https://unpkg.com/react@15/dist/react.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
+<script src="https://npmcdn.com/babel-core@5.8.38/browser.min.js"></script>
+<script src="https://soulwire.github.io/sketch.js/js/sketch.min.js"></script>
+<script src="js/app.js"></script>
+<script type="text/babel">
+    function OurFirstComponent() {
+        return (
+            <h1>I am the child!</h1>
+        );
+    }
+    class Container extends React.Component {
+        render() {
+            const greeting = 'Lol kek 4eburek!';
+            return (
+                <div>
+                    <h1>{ greeting }</h1>
+                    <OurFirstComponent />
+                </div>
+            );
+        }
+    }
+    const placeWeWantToPutComponent = document.getElementById('hook');
+    ReactDOM.render(<Container />, placeWeWantToPutComponent);
+</script>

@@ -8,17 +8,6 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-/**
- * Source:      ResourceLoader.java
- * Created:     28.12.2016
- * Project:     Studstat
- * Make:        IntelliJ IDEA 2016.3, JDK 1.8
- * <p>
- * {@code ResourceLoader} utility class for getting resource from file as a string.
- *
- * @author Maksim Marchuk
- */
-
 @Component
 public class ResourceLoader {
     public String getResourceAsString(String filePath) {
