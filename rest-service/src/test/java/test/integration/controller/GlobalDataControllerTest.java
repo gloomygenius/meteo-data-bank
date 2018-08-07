@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class GlobalDataControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    @MockBean
+    @Autowired
     private GlobalDataService globalDataService;
 
     /**

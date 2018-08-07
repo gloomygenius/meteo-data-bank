@@ -16,10 +16,10 @@ class GlobalDataController {
     lateinit var globalDataService: GlobalDataService
 
     @PostMapping("/fetch")
-    @ApiOperation("Обновить данные с серверов naca. Формат даты: yyyy-MM-dd. " + "endDate должно быть больше startDate хотя бы на 1 день")
-    fun updateData(@RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") startDate: LocalDate,
-                   @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") endDate: LocalDate,
-                   @RequestParam(required = false) sourceId: Long?): ResponseEntity<String> {
+    @ApiOperation("Обновить данные с серверов naca. Формат даты: dd-MM-yyyy. endDate должно быть больше startDate хотя бы на 1 день")
+    fun addTaskToUpdateData(@RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") startDate: LocalDate,
+                            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") endDate: LocalDate,
+                            @RequestParam sourceId: Long): ResponseEntity<String> {
         globalDataService.fetchFromSource(startDate, endDate, sourceId)
         return ResponseEntity("Данные успешно добавлены в очередь на обновление", HttpStatus.OK)
     }
