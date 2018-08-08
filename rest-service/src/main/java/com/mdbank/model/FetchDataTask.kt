@@ -11,28 +11,19 @@ data class FetchDataTask(
         @Column(name = "fetch_data_task_id")
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fetch_data_task_seq_gen")
         @SequenceGenerator(name = "fetch_data_task_seq_gen", sequenceName = "fetch_data_task_id_seq", allocationSize = 1)
-        val id: Long? = null,
+        var id: Long? = null,
 
         @Column(nullable = false)
-        val startDate: LocalDate,
-
-        @Column(nullable = false)
-        val endDate: LocalDate,
-
-        var processedFiles: Int = 0,
+        val date: LocalDate,
 
         @ManyToOne
         @JoinColumn(name = "data_meta_info_id", nullable = false)
-        val source: DataSourceInfo) {
+        val source: DataSourceInfo,
 
-    constructor(start: LocalDate, end: LocalDate, src: DataSourceInfo) : this(startDate = start, endDate = end, source = src)
+        @Enumerated(EnumType.STRING)
+        var status: TaskStatus = TaskStatus.NEW) {
 
-    fun generateLinks(): List<String> {
-        val numberOfDays = DAYS.between(startDate, endDate)
-        val links = ArrayList<String>()
-        for (day in processedFiles..numberOfDays) {
-            startDate.plusDays(day).let { date -> source.generateLink(date) }.let { links.add(it) }
-        }
-        return links
-    }
+    constructor(date: LocalDate, src: DataSourceInfo) : this(date = date, source = src)
+
+    fun generateLink(): String = source.generateLink(date)
 }
