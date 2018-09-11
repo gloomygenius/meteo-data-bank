@@ -6,7 +6,7 @@ import com.mdbank.repository.DataMetaInfoRepository
 import com.mdbank.service.DownloadService
 import com.mdbank.service.LocalDataService
 import com.mdbank.service.PositionService
-import com.mdbank.util.NetCdfProcessor
+import com.mdbank.service.nc4.NetCdfProcessor
 import org.aspectj.weaver.tools.cache.SimpleCacheFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -54,9 +54,9 @@ class FetchDataProcessor @Autowired constructor(val taskQueue: TaskQueue,
     }
 
     fun readDataFromNc4FileAndSaveToLocalData(file: Path, metaInfo: DataMetaInfo) {
-        val globalData = netCdfProcessor.readFromNc4ToGlobalData(file, metaInfo)
-        positionService.forEachPosition { position ->
-            globalData.toLocalData(position).let { localData -> localDataService.save(localData) }
-        }
+//        val globalData = netCdfProcessor.readFromNc4ToGlobalData(file, metaInfo)
+//        positionService.forEachPosition { position ->
+//            globalData.toLocalData(position).let { localData -> localDataService.save(localData) }
+//        }
     }
 }

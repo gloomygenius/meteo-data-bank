@@ -38,7 +38,7 @@ class FloatListUserType : UserType {
 
     override fun disassemble(value: Any): Serializable = ArrayList(value as List<Float>)
 
-    override fun assemble(cached: Serializable, owner: Any): Any = ArrayList(cached as List<Float>)
+    override fun assemble(cached: Serializable, owner: Any): Any = ArrayList(cached as ArrayList<Float>)
 
     override fun replace(original: Any, target: Any, owner: Any): Any? = null
 }

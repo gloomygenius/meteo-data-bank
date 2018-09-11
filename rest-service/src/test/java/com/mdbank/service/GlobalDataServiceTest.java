@@ -26,7 +26,6 @@ public class GlobalDataServiceTest {
         taskQueueMock = mock(TaskQueue.class);
         when(taskQueueMock.putNew(any(FetchDataTask.class))).thenAnswer(h -> h.getArgument(0));
 
-        globalDataService = new GlobalDataService(dataSourceInfoRepositoryMock, taskQueueMock);
     }
 
     @Test

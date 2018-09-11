@@ -12,6 +12,7 @@ import java.time.Year
 @Service
 class LocalDataService @Autowired constructor(private val localDataRepository: LocalDataRepository,
                                               private val positionService: PositionService) {
+    @Transactional(readOnly = true)
     fun getFormattedDataByPositionAndYear(latitude: Double, longitude: Double, year: Year): FormattedLocalData {
         val position = positionService.getPosition(latitude, longitude)
         val localData = localDataRepository.findByPositionAndYear(position, year)

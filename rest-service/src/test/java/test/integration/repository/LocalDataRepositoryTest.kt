@@ -43,7 +43,7 @@ open class LocalDataRepositoryTest {
         val savedData = localDataRepository.save(localData)
 
         assertNotNull(savedData)
-        assertEquals(localData.payload, savedData.payload)
+        assertEquals(localData, savedData)
     }
 
 

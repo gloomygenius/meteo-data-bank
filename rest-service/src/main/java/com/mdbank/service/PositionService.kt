@@ -7,6 +7,7 @@ import com.mdbank.repository.PositionRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import javax.annotation.PostConstruct
 
 @Service
@@ -21,6 +22,7 @@ class PositionService @Autowired constructor(globalDataConfig: GlobalDataConfig,
     private val log = LoggerFactory.getLogger(this.javaClass)
 
     @PostConstruct
+    @Transactional
     internal fun init() {
         if (minLatitude > maxLatitude) {
             throw  InitializationException()
@@ -30,92 +32,44 @@ class PositionService @Autowired constructor(globalDataConfig: GlobalDataConfig,
             throw  InitializationException()
         }
 
-        val aroundLat: (Double) -> Double = { lat -> transformLatToIndex(lat).let { index -> transformIndexToLat(index) } }
 
-        aroundLat(minLatitude).also {
-            if (it != minLatitude) {
-                log.warn("Min latitude was rounded from $minLatitude to $it")
-                minLatitude = it
+        val minPos = Position(latitude = minLatitude, longitude = minLongitude)
+        val maxPos = Position(latitude = maxLatitude, longitude = maxLongitude)
+
+        val maxLongIndex = maxPos.longIndex
+        val minLongIndex = minPos.longIndex
+        val maxLatIndex = maxPos.latIndex
+        val minLatIndex = minPos.latIndex
+
+        val count = (maxLongIndex - minLongIndex + 1) * (maxLatIndex - minLatIndex + 1)
+
+        if (count.toLong() != repository.count()) {
+            val positions = HashSet<Position>()
+            for (longIndex in minLongIndex..maxLongIndex) {
+                for (latIndex in minLatIndex..maxLatIndex) {
+                    val position = Position(latitude = transformIndexToLat(latIndex), longitude = transformIndexToLon(longIndex))
+                    positions.add(position)
+                }
             }
+
+            repository.saveAll(positions)
         }
-
-        aroundLat(maxLatitude).also {
-            if (it != maxLatitude) {
-                log.warn("Max latitude was rounded from $maxLatitude to $it")
-                maxLatitude = it
-            }
-        }
-
-        val aroundLongitude: (Double) -> Double = { lat -> transformLonToIndex(lat).let { index -> transformIndexToLon(index) } }
-
-        aroundLongitude(minLongitude).also {
-            if (it != minLongitude) {
-                log.warn("Min longitude was rounded from $minLongitude to $it")
-                minLongitude = it
-            }
-        }
-
-        aroundLongitude(maxLongitude).also {
-            if (it != maxLongitude) {
-                log.warn("Max longitude was rounded from $maxLongitude to $it")
-                maxLongitude = it
-            }
-        }
-
     }
 
     fun forEachPosition(consumer: (Position) -> Unit) {
-        if (cachedPositions.isEmpty()) {
-            loadAllPositionFromDB()
-        }
         cachedPositions.forEach(consumer)
-    }
-
-    private fun loadAllPositionFromDB() {
-        for (latIndex in transformLatToIndex(minLatitude)..transformLatToIndex(maxLatitude)) {
-            for (lonIndex in transformLonToIndex(minLongitude)..transformLonToIndex(maxLongitude)) {
-                val positionFromDb = repository.findByLatitudeAndLongitude(transformIndexToLat(latIndex), transformIndexToLon(lonIndex))
-                if (positionFromDb == null) {
-                    val newPosition = Position(latitude = transformIndexToLat(latIndex), longitude = transformIndexToLon(lonIndex))
-                    repository.save(newPosition).let { cachedPositions.add(it)}
-                } else {
-                    cachedPositions.add(positionFromDb)
-                }
-            }
-        }
     }
 
     fun getPosition(latitude: Double, longitude: Double): Position {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-}
 
-/**
- * Индекс широты в диапазоне [0..360]
- */
-val Position.latIndex: Int
-    get() = transformLatToIndex(latitude)
-
-/**
- * Индекс долготы в диапазоне [0..576]
- */
-val Position.longIndex: Int
-    get() = transformLonToIndex(longitude)
-
-
-fun transformLatToIndex(latitude: Double): Int {
-    if (latitude < -90.01 || latitude > 90.01) {
-        throw IllegalArgumentException(String.format("Latitude %s out of range (-90..90)", latitude))
+    @Transactional(readOnly = true)
+    fun getAllPositions(): List<Position> {
+        return repository.findAll()
     }
-    return Math.round((latitude + 90) * 2).toInt()
 }
 
-fun transformLonToIndex(longitude: Double): Int {
-    if (longitude < -180.01 || longitude >= 180) {
-        throw IllegalArgumentException(String.format("Longitude %s out of range (-180..180)", longitude))
-    }
-    return Math.round((longitude + 180) / 0.625).toInt()
-}
 
 fun transformIndexToLat(index: Int): Double = index / 2.0 - 90
 

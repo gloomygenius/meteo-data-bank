@@ -1,8 +1,6 @@
 package com.mdbank.model
 
 import com.mdbank.model.metadata.DataMetaInfo
-import com.mdbank.service.latIndex
-import com.mdbank.service.longIndex
 import com.mdbank.util.totalHoursInYear
 import com.mdbank.util.year
 import java.time.Instant

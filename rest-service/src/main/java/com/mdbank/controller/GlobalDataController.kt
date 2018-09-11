@@ -23,9 +23,10 @@ class GlobalDataController @Autowired constructor(val globalDataService: GlobalD
         return ResponseEntity("Данные успешно добавлены в очередь на обновление", HttpStatus.OK)
     }
 
-    @GetMapping("/fetch/short-info")
-    @ApiOperation("Краткая информация о запущенных обновлениях")
-    fun getShortUpdateStatus(): ResponseEntity<String> {
-        return ResponseEntity(taskQueue.getStatus(), HttpStatus.OK)
+    @GetMapping("/from-files")
+    @ApiOperation("Обновление из файлов")
+    fun updateFromFiles(parameters: List<String>): ResponseEntity<String> {
+        globalDataService.updateFromFiles(parameters)
+        return ResponseEntity("Success", HttpStatus.OK)
     }
 }

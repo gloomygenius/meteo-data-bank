@@ -8,7 +8,7 @@ import java.time.ZoneOffset
 class DateUtilKt {
     @Test
     fun testThatHourSinceYearBeginningReturnTrueValue() {
-        val instant1 = LocalDateTime.of(2018, 1, 1, 0, 1).toInstant(ZoneOffset.UTC)
+        val instant1 = LocalDateTime.of(2018, 1, 1, 0, 0).toInstant(ZoneOffset.UTC)
         val firstHourInYear = 0
         assertEquals(firstHourInYear, instant1.hourSinceYearBeginning())
 
