@@ -23,7 +23,7 @@ public enum NasaServer {
     public String getLink(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MM");
-        return "https://" + server + ".gesdisc.eosdis.nasa.gov/dataSeries/MERRA2/" + dataSet + "/"
+        return "https://" + server + ".gesdisc.eosdis.nasa.gov/data/MERRA2/" + dataSet + "/"
                 + date.getYear() + "/" + monthFormatter.format(date) + "/" + data + "."
                 + formatter.format(date) +
                 ".nc4";

@@ -44,9 +44,11 @@ class GlobalDataService @Autowired constructor(val dataSourceInfoRepository: Dat
     }
 
     @Transactional
-    fun updateFromFiles(parameters: List<String>) {
+    fun updateFromFiles(parameters: Array<String>) {
+
         for (parameter in parameters) {
             val metaInfo = dataMetaInfoRepository.findByParameterName(parameter)
+                    ?: throw Exception("$parameter doesn't store in DB")
             val dataForParameter = nc4Manager.getDataForParameter(parameter)
             val globalDataList = dataForParameter.map { GlobalData(metaInfo, it) }
             if (globalDataList.isNotEmpty()) {
@@ -57,5 +59,10 @@ class GlobalDataService @Autowired constructor(val dataSourceInfoRepository: Dat
                 }
             }
         }
+    }
+
+    fun getDownloadLink(date: LocalDate, parameter: String): String? {
+        val metaInfo = dataMetaInfoRepository.findByParameterName(parameter)
+        return metaInfo?.sourceInfo?.generateLink(date)
     }
 }

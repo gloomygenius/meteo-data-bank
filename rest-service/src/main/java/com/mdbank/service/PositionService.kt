@@ -60,8 +60,9 @@ class PositionService @Autowired constructor(globalDataConfig: GlobalDataConfig,
         cachedPositions.forEach(consumer)
     }
 
-    fun getPosition(latitude: Double, longitude: Double): Position {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    @Transactional(readOnly = true)
+    fun getPosition(latitude: Double, longitude: Double): Position? {
+        return repository.findByLatitudeAndLongitude(latitude, longitude)
     }
 
     @Transactional(readOnly = true)

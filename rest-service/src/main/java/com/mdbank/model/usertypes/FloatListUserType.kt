@@ -1,4 +1,4 @@
-package com.mdbank.repository.usertypes
+package com.mdbank.model.usertypes
 
 import org.hibernate.engine.spi.SharedSessionContractImplementor
 import org.hibernate.usertype.UserType

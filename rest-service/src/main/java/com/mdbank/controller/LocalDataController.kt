@@ -17,8 +17,11 @@ class LocalDataController {
 
     @GetMapping
     @Transactional(readOnly = true)
-    fun getLocalDataByPositionAndYear(@RequestParam latitude: Double, @RequestParam longitude: Double, @RequestParam year: Year): ResponseEntity<FormattedLocalData> {
-        val dataByPositionAndYear = localDataService.getFormattedDataByPositionAndYear(latitude, longitude, year)
+    fun getLocalDataByPositionAndYear(@RequestParam latitude: Double,
+                                      @RequestParam longitude: Double,
+                                      @RequestParam year: Year,
+                                      @RequestParam parameter: String): ResponseEntity<FormattedLocalData> {
+        val dataByPositionAndYear = localDataService.getFormattedDataByPositionAndYear(latitude, longitude, year, parameter)
         return ResponseEntity.ok(dataByPositionAndYear)
     }
 }

@@ -38,9 +38,9 @@ class NetCdfProcessor {
     private fun readSeries(timeIndex: Int, ucarArray: ucar.ma2.Array): Array<FloatArray> {
 
         val index = ucarArray.index
-        val maxLatIndex = 361
-        val maxLongIndex = 576
-        val twoDimensionalArray = Array(maxLatIndex) { FloatArray(maxLongIndex) }
+        val maxLatIndex = 360
+        val maxLongIndex = 575
+        val twoDimensionalArray = Array(maxLatIndex+1) { FloatArray(maxLongIndex+1) }
 
         for (latIndex in 0..maxLatIndex) {
             for (longIndex in 0..maxLongIndex) {

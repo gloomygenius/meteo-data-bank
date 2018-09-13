@@ -1,5 +1,6 @@
 package com.mdbank.model.metadata
 
+import org.jetbrains.annotations.NotNull
 import javax.persistence.*
 
 @Entity
@@ -16,6 +17,8 @@ class DataMetaInfo(
         val description: String? = null,
 
         @ManyToOne
+        @JoinColumn(name = "data_source_info_id" )
+        @NotNull
         val sourceInfo: DataSourceInfo? = null,
         /**
          * Шаг данных в минутах

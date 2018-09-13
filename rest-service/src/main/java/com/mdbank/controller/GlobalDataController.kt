@@ -25,8 +25,15 @@ class GlobalDataController @Autowired constructor(val globalDataService: GlobalD
 
     @GetMapping("/from-files")
     @ApiOperation("Обновление из файлов")
-    fun updateFromFiles(parameters: List<String>): ResponseEntity<String> {
+    fun updateFromFiles(parameters: Array<String>): ResponseEntity<String> {
         globalDataService.updateFromFiles(parameters)
         return ResponseEntity("Success", HttpStatus.OK)
+    }
+
+    @GetMapping("/download-link")
+    @ApiOperation("Ссылка на скачивание nc4 файла")
+    fun getLink(@RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") date: LocalDate,
+                @RequestParam parameter: String): ResponseEntity<String> {
+        return ResponseEntity(globalDataService.getDownloadLink(date, parameter) ?: "Link doesn't exist", HttpStatus.OK)
     }
 }

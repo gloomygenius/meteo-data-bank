@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface DataMetaInfoRepository : JpaRepository<DataMetaInfo, Long> {
     fun findBySourceInfo(source: DataSourceInfo): List<DataMetaInfo>
-    fun findByParameterName(parameter: String): DataMetaInfo
+    fun findByParameterName(parameter: String): DataMetaInfo?
 }
