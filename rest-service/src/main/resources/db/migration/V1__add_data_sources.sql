@@ -61,5 +61,12 @@ CONSTRAINT role_id_unique_index UNIQUE (user_id, role_name),
 CONSTRAINT FK_user_roles_TO_app_users FOREIGN KEY(user_id) references app_users
 );
 
-INSERT INTO data_source_info(data_source_info_id, data, data_set, server) VALUES(nextval('data_source_info_id_seq'), 'MERRA2_400.tavg1_2d_rad_Nx', 'M2T1NXRAD.5.12.4', 'goldsmr4');
-INSERT INTO data_source_info(data_source_info_id, data, data_set, server) VALUES(nextval('data_source_info_id_seq'), 'MERRA2_400.tavg1_2d_slv_Nx', 'M2T1NXSLV.5.12.4', 'goldsmr4');
+INSERT INTO data_source_info(data_source_info_id, data, data_set, server)
+  VALUES(nextval('data_source_info_id_seq'), 'MERRA2_400.tavg1_2d_rad_Nx', 'M2T1NXRAD.5.12.4', 'goldsmr4');
+
+INSERT INTO data_source_info(data_source_info_id, data, data_set, server)
+  VALUES(nextval('data_source_info_id_seq'), 'MERRA2_400.tavg1_2d_slv_Nx', 'M2T1NXSLV.5.12.4', 'goldsmr4');
+
+INSERT INTO data_meta_info(data_meta_info_id, description, parameter_name, resolution, data_source_info_id)
+  VALUES (nextval('data_meta_info_id_seq'), 'Shortwave solar radiation', 'SWGDN', 60,
+    (SELECT ds.data_source_info_id FROM data_source_info ds WHERE ds.data='MERRA2_400.tavg1_2d_rad_Nx'));
