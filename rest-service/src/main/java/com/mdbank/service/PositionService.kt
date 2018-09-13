@@ -3,6 +3,8 @@ package com.mdbank.service
 import com.mdbank.config.GlobalDataConfig
 import com.mdbank.exception.InitializationException
 import com.mdbank.model.Position
+import com.mdbank.model.transformIndexToLat
+import com.mdbank.model.transformIndexToLon
 import com.mdbank.repository.PositionRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,18 +23,8 @@ class PositionService @Autowired constructor(globalDataConfig: GlobalDataConfig,
     private val lonStep: Double = globalDataConfig.lonStep
     private val log = LoggerFactory.getLogger(this.javaClass)
 
-    @PostConstruct
     @Transactional
-    internal fun init() {
-        if (minLatitude > maxLatitude) {
-            throw  InitializationException()
-        }
-
-        if (minLongitude > maxLongitude) {
-            throw  InitializationException()
-        }
-
-
+    internal fun initAllPositions() {
         val minPos = Position(latitude = minLatitude, longitude = minLongitude)
         val maxPos = Position(latitude = maxLatitude, longitude = maxLongitude)
 
@@ -70,9 +62,3 @@ class PositionService @Autowired constructor(globalDataConfig: GlobalDataConfig,
         return repository.findAll()
     }
 }
-
-
-fun transformIndexToLat(index: Int): Double = index / 2.0 - 90
-
-
-fun transformIndexToLon(index: Int): Double = index * 0.625 - 180

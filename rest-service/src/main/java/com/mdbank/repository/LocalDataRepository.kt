@@ -7,8 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.time.Year
 
-@Repository
-interface LocalDataRepository : JpaRepository<LocalData, Long> {
-    fun findByPositionAndYear(position: Position, year: Year): LocalData?
+interface LocalDataRepository {
     fun findByPositionAndYearAndDataMetaInfo(position: Position, year: Year, metaInfo: DataMetaInfo): LocalData?
+    /**
+     * Метод сохраняет сущность в БД или обновляет уже существующую, если задан ID
+     */
+    fun save(localData: LocalData): LocalData
 }

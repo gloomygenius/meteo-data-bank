@@ -1,9 +1,11 @@
 package com.mdbank.config
 
+import com.mdbank.exception.InitializationException
 import com.mdbank.model.validation.LatitudeConstraint
 import com.mdbank.model.validation.LongitudeConstraint
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
+import javax.annotation.PostConstruct
 import javax.validation.constraints.Max
 import javax.validation.constraints.Min
 
@@ -25,4 +27,15 @@ class GlobalDataConfig {
     var latStep: Double = 0.5
 
     var lonStep: Double = 0.625
+
+    @PostConstruct
+    fun check() {
+        if (minLatitude!! > maxLatitude!!) {
+            throw  InitializationException()
+        }
+
+        if (minLongitude!! > maxLongitude!!) {
+            throw  InitializationException()
+        }
+    }
 }

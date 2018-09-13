@@ -43,3 +43,8 @@ data class Position(
             return roundedValue.toInt()
         }
 }
+
+fun transformIndexToLat(index: Int) = index / 2.0 - 90
+
+
+fun transformIndexToLon(index: Int) = index * 0.625 - 180

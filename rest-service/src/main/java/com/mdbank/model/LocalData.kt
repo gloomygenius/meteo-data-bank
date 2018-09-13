@@ -8,27 +8,18 @@ import org.hibernate.annotations.Type
 import java.time.*
 import javax.persistence.*
 
-@Entity
-data class LocalData(
-        @Id
-        @Column(name = "local_data_id")
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "local_data_seq_gen")
-        @SequenceGenerator(name = "local_data_seq_gen", sequenceName = "local_data_id_seq", allocationSize = 1)
-        val id: Long? = null,
+data class LocalData(var id: Long? = null,
+                     val dataMetaInfo: DataMetaInfo,
+                     val position: Position,
+                     val year: Year,
+                     private val payload: List<Float?> = ArrayList()) {
 
-        @ManyToOne
-        @JoinColumn(name = "data_meta_info_id", nullable = false)
-        val dataMetaInfo: DataMetaInfo,
-
-        @ManyToOne
-        @JoinColumn(name = "position_id", nullable = false)
-        val position: Position,
-
-        @Column(nullable = false)
-        val year: Year,
-
-        @Type(type = "float_list_type")
-        private val payload: List<Float?> = ArrayList()) {
+    /**
+     * Метод возвращает массив данных, где индекс - количество часов с начала года
+     */
+    fun getValuesAsArray(): Array<Float?>{
+        return payload.toTypedArray()
+    }
 
     /**
      * Метод возвращает значение относящееся к указанному моменту времени

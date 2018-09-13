@@ -25,7 +25,7 @@ class PositionServiceTest {
                 .also { it.minLongitude = 0.0 }
                 .also { it.maxLongitude = 20.2 }
         positionService = PositionService(globalDataConfig = globalDataConfig, repository = positionRepository)
-        positionService.init()
+        positionService.initAllPositions()
     }
 
     @Test

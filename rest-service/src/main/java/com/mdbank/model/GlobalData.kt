@@ -20,7 +20,7 @@ class GlobalData(val metaInfo: DataMetaInfo,
     fun toLocalData(position: Position): LocalData {
         val instantToValueSortedMap = data.mapValues { it.value[position.latIndex][position.longIndex] }
 
-        val countOfYearsInKeys = instantToValueSortedMap.keys.stream().distinct().count()
+        val countOfYearsInKeys = instantToValueSortedMap.keys.stream().map { it.year }.distinct().count()
 
         if (countOfYearsInKeys != 1L) {
             throw IllegalStateException("Map contains times with different years")

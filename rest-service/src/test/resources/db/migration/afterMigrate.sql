@@ -1,6 +1,4 @@
-INSERT INTO position (latitude, longitude, altitude) VALUES (10.0, 20.0, 30.0)
+INSERT INTO position (position_id, latitude, longitude, altitude) VALUES (nextval('position_id_seq'), 10.0, 20.0, 30.0)
 ON CONFLICT DO NOTHING;
-INSERT INTO local_data (parameter, year, position_id, values) VALUES ('WIND_2M', 2016, 1, '{23.0,24.0, 16.0}')
-ON CONFLICT DO NOTHING;
-INSERT INTO local_data (parameter, year, position_id, values) VALUES ('SOLAR_DIRECT', 2016, 1, '{100.0,130.0, 200.0}')
+INSERT INTO local_data (data_meta_info_id, year, position_id, payload) VALUES (1, 2016, 1, '{100.0,130.0, 200.0}')
 ON CONFLICT DO NOTHING;

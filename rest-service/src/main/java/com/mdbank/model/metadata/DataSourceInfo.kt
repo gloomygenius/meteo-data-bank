@@ -20,6 +20,6 @@ data class DataSourceInfo(@Id
     fun generateLink(date: LocalDate): String {
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
         val monthFormatter = DateTimeFormatter.ofPattern("MM")
-        return "https://$server.gesdisc.eosdis.nasa.gov/dataSeries/MERRA2/$dataSet/${date.year}/${monthFormatter.format(date)}/$data.${formatter.format(date)}.nc4"
+        return "https://$server.gesdisc.eosdis.nasa.gov/data/MERRA2/$dataSet/${date.year}/${monthFormatter.format(date)}/$data.${formatter.format(date)}.nc4"
     }
 }

@@ -5,6 +5,7 @@ import com.mdbank.model.LocalData
 import com.mdbank.model.Position
 import com.mdbank.model.metadata.DataMetaInfo
 import com.mdbank.repository.DataMetaInfoRepository
+import com.mdbank.repository.DataSourceInfoRepository
 import com.mdbank.repository.LocalDataRepository
 import com.mdbank.repository.PositionRepository
 import org.junit.Assert.assertEquals
@@ -32,6 +33,8 @@ open class LocalDataRepositoryTest {
     private lateinit var positionRepository: PositionRepository
     @Autowired
     private lateinit var dataMetaInfoRepository: DataMetaInfoRepository
+    @Autowired
+    private lateinit var dataSourceInfoRepository: DataSourceInfoRepository
 
     @Test
     fun testInsertLocalDataSuccessfully() {
@@ -55,18 +58,24 @@ open class LocalDataRepositoryTest {
         val localData = LocalData(payload = payload, dataMetaInfo = dataMetaInfo, year = Year.of(2018), position = position)
         val savedData = localDataRepository.save(localData)
 
-        val searchedLocalData = localDataRepository.findByPositionAndYear(position, Year.of(2018))
+        val searchedLocalData = localDataRepository.findByPositionAndYearAndDataMetaInfo(position, Year.of(2018), dataMetaInfo)
+
         assertNotNull(searchedLocalData)
         assertEquals(savedData, searchedLocalData)
     }
 
-    private fun addSimplePositionToDb(): Position = Position(latitude = 30.0, longitude = 30.0).let { positionRepository.save(it) }
+    private fun addSimplePositionToDb(): Position = Position(latitude = 30.0, longitude = 30.0)
+            .let { positionRepository.save(it) }
+            .apply{ positionRepository.flush() }
 
     private fun addSimpleDataMetaInfoToDb(): DataMetaInfo {
+        val sourceInfo = dataSourceInfoRepository.getOne(1)
         return DataMetaInfo(
                 description = "Какие-то данные",
                 parameterName = "WIND",
-                resolution = 60)
-                .also { dataMetaInfoRepository.save(it) }
+                resolution = 60,
+                sourceInfo = sourceInfo)
+                .let{ dataMetaInfoRepository.save(it) }
+                .apply { dataMetaInfoRepository.flush() }
     }
 }
