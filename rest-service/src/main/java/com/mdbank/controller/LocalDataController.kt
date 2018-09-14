@@ -4,6 +4,7 @@ import com.mdbank.controller.dto.localdata.FormattedLocalData
 import com.mdbank.controller.dto.localdata.LocalDataRequestDto
 import com.mdbank.service.LocalDataService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
@@ -22,6 +23,7 @@ class LocalDataController {
                                       @RequestParam year: Year,
                                       @RequestParam parameter: String): ResponseEntity<FormattedLocalData> {
         val dataByPositionAndYear = localDataService.getFormattedDataByPositionAndYear(latitude, longitude, year, parameter)
-        return ResponseEntity.ok(dataByPositionAndYear)
+        return dataByPositionAndYear?.let { ResponseEntity.ok(dataByPositionAndYear) }
+                ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }
 }

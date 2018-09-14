@@ -15,11 +15,11 @@ class LocalDataService @Autowired constructor(private val localDataRepository: L
                                               private val positionService: PositionService,
                                               private val metaInfoRepository: DataMetaInfoRepository) {
     @Transactional(readOnly = true)
-    fun getFormattedDataByPositionAndYear(latitude: Double, longitude: Double, year: Year, parameter: String): FormattedLocalData {
+    fun getFormattedDataByPositionAndYear(latitude: Double, longitude: Double, year: Year, parameter: String): FormattedLocalData? {
         val position = positionService.getPosition(latitude, longitude) ?: throw Exception("Illegal position")
         val metaInfo = metaInfoRepository.findByParameterName(parameter)!! //FIXME
         val localData = localDataRepository.findByPositionAndYearAndDataMetaInfo(position, year, metaInfo)
-        return FormattedLocalData(localData ?: throw Exception("Lol kek"))
+        return localData?.let { FormattedLocalData(it) }
     }
 
     fun interpolateLocalData(position: Position, year: Year): LocalData {

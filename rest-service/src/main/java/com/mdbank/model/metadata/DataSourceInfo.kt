@@ -9,7 +9,7 @@ data class DataSourceInfo(@Id
                           @Column(name = "data_source_info_id")
                           @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "data_source_info_seq_gen")
                           @SequenceGenerator(name = "data_source_info_seq_gen", sequenceName = "data_source_info_id_seq", allocationSize = 1)
-                          private val id: Long? = null,
+                          val id: Long? = null,
 
                           val server: String,
 
