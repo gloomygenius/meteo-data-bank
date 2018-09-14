@@ -25,20 +25,16 @@ open class PositionRepositoryTest {
     @Autowired
     lateinit var localDataRep: LocalDataRepository
 
-    @After
-    fun deinit() = positionRepository.deleteAll()
-
     @Test
     fun testSavePosition() {
-        val position = Position(latitude = 24.0, longitude = 50.0).let { positionRepository.save(it) }
+        val position = Position(latitude = 25.0, longitude = 50.0).let { positionRepository.save(it) }
         assertNotNull(position.id)
+        positionRepository.delete(position)
     }
 
     @Test(expected = DataIntegrityViolationException::class)
     fun testSaveTwoEqualPositions() {
         val position1 = Position(latitude = 24.0, longitude = 50.0).let { positionRepository.save(it) }
-        assertNotNull(position1)
         val position2 = Position(latitude = 24.0, longitude = 50.0).let { positionRepository.save(it) }
-        assertNotNull(position2)
     }
 }
