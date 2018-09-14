@@ -22,7 +22,7 @@ class LocalDataRepositoryJdbcTemplate @Autowired constructor(private val jdbcTem
                     metaInfo,
                     position,
                     year,
-                    (rs.getArray("payload").array as Array<Double?>).map { it?.toFloat() }.toList()
+                    (rs.getArray("payload").array as Array<Float?>).toList()
             )
         }
     }

@@ -7,7 +7,7 @@ import javax.annotation.PostConstruct
 
 @Configuration
 //Инциализация всех позиций только при полном старте приложения, исключаются тесты
-@Profile("dev","prod")
+@Profile("dev", "prod")
 class PositionConfig constructor(val positionService: PositionService) {
 
     @PostConstruct

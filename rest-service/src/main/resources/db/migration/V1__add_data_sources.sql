@@ -28,7 +28,7 @@ CONSTRAINT latitude_longitude_index UNIQUE (latitude, longitude)
 CREATE SEQUENCE local_data_id_seq START 1 INCREMENT 1;
 CREATE TABLE local_data (
 local_data_id INT8 PRIMARY KEY DEFAULT nextval('local_data_id_seq'),
-payload float[],
+payload real[],
 year INT4 NOT NULL,
 data_meta_info_id INT8 NOT NULL,
 position_id INT8 NOT NULL,
