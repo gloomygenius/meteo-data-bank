@@ -8,15 +8,23 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import javax.annotation.PreDestroy
 
 @RestController
 @RequestMapping("\${api.root.v1}/global-data")
 class GlobalDataController @Autowired constructor(val globalDataService: GlobalDataService) {
+    private val executorService: ExecutorService = Executors.newFixedThreadPool(1)
+
+    @PreDestroy
+    fun deinit() = executorService.shutdown()
+
     @GetMapping("/from-files")
     @ApiOperation("Обновление всех параметров на основе файлов, лежащих в соответствующей директории")
     fun updateFromFiles(): ResponseEntity<String> {
-        globalDataService.updateFromFiles()
-        return ResponseEntity("Success", HttpStatus.OK)
+        executorService.execute { globalDataService.updateFromFiles() }
+        return ResponseEntity("Task was added to queue", HttpStatus.OK)
     }
 
     @GetMapping("/download-link")
