@@ -26,8 +26,24 @@ class LocalDataService @Autowired constructor(private val localDataRepository: L
         TODO("Реализовать интерполяцию локальных данных")
     }
 
+    /**
+     * Метод сохраняет объект LocalData. Если для текущей позиции, года и dataMetaInfo нет сохранённого хначения,
+     * то LocalData просто сохраняется в БД. Если в БД уже существует такая запись, то данные payload двух объектов
+     * сливаются и запись обновляется
+     */
     @Transactional
     fun save(localData: LocalData): LocalData {
-        return localDataRepository.save(localData)
+        val existingLocalData = localDataRepository.findByPositionAndYearAndDataMetaInfo(localData.position, localData.year, localData.dataMetaInfo)
+        var localDataToStore = localData
+        if (existingLocalData != null) {
+            localDataToStore = existingLocalData.merge(localData)
+        }
+        return localDataRepository.save(localDataToStore)
+    }
+
+    fun findByPositionAndYearAndParameter(position: Position, year: Year, parameterName: String): LocalData? {
+        //todo можно передалать на один запрос с джоином
+        val metaInfo = metaInfoRepository.findByParameterName(parameterName) ?: throw RuntimeException("Parameter $parameterName is not valid")
+        return localDataRepository.findByPositionAndYearAndDataMetaInfo(position, year, metaInfo)
     }
 }

@@ -14,7 +14,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder
 class LocalDataRepositoryJdbcTemplate @Autowired constructor(private val jdbcTemplate: JdbcTemplate) : LocalDataRepository {
 
     override fun findByPositionAndYearAndDataMetaInfo(position: Position, year: Year, metaInfo: DataMetaInfo): LocalData? {
-        return jdbcTemplate.queryForObject("select ld.* from local_data ld where ld.position_id=${position.id} and ld.year=${year.value} and ld.data_meta_info_id=${metaInfo.id} "
+        val resultList = jdbcTemplate.query("select ld.* from local_data ld where ld.position_id=? and ld.year=? and ld.data_meta_info_id=?",
+                arrayOf(position.id, year.value, metaInfo.id)
         ) { rs, _ ->
             @Suppress("UNCHECKED_CAST")
             LocalData(
@@ -25,6 +26,7 @@ class LocalDataRepositoryJdbcTemplate @Autowired constructor(private val jdbcTem
                     (rs.getArray("payload").array as Array<Float?>).toList()
             )
         }
+        return resultList.firstOrNull()
     }
 
     override fun save(localData: LocalData): LocalData {

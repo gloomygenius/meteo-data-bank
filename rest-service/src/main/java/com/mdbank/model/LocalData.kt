@@ -17,7 +17,7 @@ data class LocalData(var id: Long? = null,
     /**
      * Метод возвращает массив данных, где индекс - количество часов с начала года
      */
-    fun getValuesAsArray(): Array<Float?>{
+    fun getValuesAsArray(): Array<Float?> {
         return payload.toTypedArray()
     }
 
@@ -40,7 +40,7 @@ data class LocalData(var id: Long? = null,
     fun forEach(consumer: (date: Instant, value: Float?) -> Unit) {
         val firstHourInYear = LocalDateTime.of(year.value, 1, 1, 0, 0)
         (0..(year.totalHoursInYear() - 1)).forEach { i ->
-            val utcdate= firstHourInYear.plusHours(i.toLong()).toInstant(ZoneOffset.UTC)
+            val utcdate = firstHourInYear.plusHours(i.toLong()).toInstant(ZoneOffset.UTC)
             consumer(utcdate, getValue(utcdate))
         }
     }
@@ -48,7 +48,7 @@ data class LocalData(var id: Long? = null,
     /**
      * Метод возвращает новый экземпляр LocalData
      *
-     * @return новый объект LocalData со слитыми данными
+     * @return новый объект LocalData с совмещёнными данными
      * @throws IllegalArgumentException если не совпдают parameter или year
      */
     fun merge(localData: LocalData): LocalData {
@@ -60,12 +60,15 @@ data class LocalData(var id: Long? = null,
             throw IllegalArgumentException("Ошибка при слиянии данных: разные года $year : ${localData.year}")
         }
 
-        val newPayload = java.util.ArrayList<Float?>(year.totalHoursInYear())
+        val newPayload = arrayOfNulls<Float?>(year.totalHoursInYear()).toMutableList()
 
         for (i in 0 until year.totalHoursInYear()) {
             val f1 = payload[i]
             val f2 = localData.payload[i]
-            newPayload.add(f1 ?: f2)
+            if (f1 != null && f2 != null && f1 != f2) {
+                throw RuntimeException("Different values in LocalData")
+            }
+            newPayload[i] = f1 ?: f2
         }
 
         return LocalData(id, dataMetaInfo, position, year, newPayload)

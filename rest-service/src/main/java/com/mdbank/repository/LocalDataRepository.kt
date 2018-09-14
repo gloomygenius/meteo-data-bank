@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository
 import java.time.Year
 
 interface LocalDataRepository {
+    /**
+     * Метод для поиска LocalData по Position, Year и DataMetaInfo
+     */
     fun findByPositionAndYearAndDataMetaInfo(position: Position, year: Year, metaInfo: DataMetaInfo): LocalData?
     /**
      * Метод сохраняет сущность в БД или обновляет уже существующую, если задан ID

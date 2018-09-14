@@ -23,8 +23,13 @@ class Nc4Manager @Autowired constructor(private val processor: NetCdfProcessor) 
         appPath = homeUserPath.resolve("meteo_data_bank/global_data/")
     }
 
-    @PostConstruct
-    private fun init() {
+    fun getDataForParameter(parameter: String): List<Map<Instant, Array<FloatArray>>> {
+        return Files.list(appPath)
+                .map { path -> processor.readFromNc4(path.toString(), parameter) }
+                .toList().filterNotNull()
+    }
+
+    fun removeFiles() {
         try {
             //clean old files in directory
             if (Files.exists(appPath)) {
@@ -33,12 +38,5 @@ class Nc4Manager @Autowired constructor(private val processor: NetCdfProcessor) 
         } catch (e: IOException) {
             log.error("Directory with nc4 files ( {} )can't be cleaned", appPath, e)
         }
-
-    }
-
-    fun getDataForParameter(parameter: String): List<Map<Instant, Array<FloatArray>>> {
-        return Files.list(appPath)
-                .map { path -> processor.readFromNc4(path.toString(), parameter) }
-                .toList().filterNotNull()
     }
 }

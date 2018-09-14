@@ -22,8 +22,8 @@ class GlobalDataService @Autowired constructor(val dataSourceInfoRepository: Dat
     private val log = LoggerFactory.getLogger(this.javaClass)
 
     @Transactional
-    fun updateFromFiles(parameters: Array<String>) {
-
+    fun updateFromFiles() {
+        val parameters = dataMetaInfoRepository.findAll().map { it.parameterName }
         for (parameter in parameters) {
             val metaInfo = dataMetaInfoRepository.findByParameterName(parameter)
                     ?: throw Exception("$parameter doesn't store in DB")
@@ -32,11 +32,13 @@ class GlobalDataService @Autowired constructor(val dataSourceInfoRepository: Dat
             if (globalDataList.isNotEmpty()) {
                 val allPositions = positionService.getAllPositions()
                 for (globalData in globalDataList) {
-                    allPositions.map { globalData.toLocalData(it) }.forEach { localDataService.save(it) }
+                    allPositions.map { globalData.toLocalData(it) }
+                            .forEach { localDataService.save(it) }
                     log.info("Global data for $parameter and date was successfully saved")
                 }
             }
         }
+        nc4Manager.removeFiles()
     }
 
     fun getDownloadLink(date: LocalDate, parameter: String): String? {

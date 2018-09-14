@@ -13,9 +13,9 @@ import java.time.LocalDate
 @RequestMapping("\${api.root.v1}/global-data")
 class GlobalDataController @Autowired constructor(val globalDataService: GlobalDataService) {
     @GetMapping("/from-files")
-    @ApiOperation("Обновление из файлов")
-    fun updateFromFiles(parameters: Array<String>): ResponseEntity<String> {
-        globalDataService.updateFromFiles(parameters)
+    @ApiOperation("Обновление всех параметров на основе файлов, лежащих в соответствующей директории")
+    fun updateFromFiles(): ResponseEntity<String> {
+        globalDataService.updateFromFiles()
         return ResponseEntity("Success", HttpStatus.OK)
     }
 
