@@ -13,8 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
-class GlobalDataService @Autowired constructor(val dataSourceInfoRepository: DataSourceInfoRepository,
-                                               val dataMetaInfoRepository: DataMetaInfoRepository,
+class GlobalDataService @Autowired constructor(val dataMetaInfoRepository: DataMetaInfoRepository,
                                                val nc4Manager: Nc4Manager,
                                                val positionService: PositionService,
                                                val localDataService: LocalDataService) {

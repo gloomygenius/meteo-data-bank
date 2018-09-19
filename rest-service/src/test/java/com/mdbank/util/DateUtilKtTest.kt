@@ -5,7 +5,7 @@ import org.junit.Test
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
-class DateUtilKt {
+class DateUtilKtTest {
     @Test
     fun testThatHourSinceYearBeginningReturnTrueValue() {
         val instant1 = LocalDateTime.of(2018, 1, 1, 0, 0).toInstant(ZoneOffset.UTC)

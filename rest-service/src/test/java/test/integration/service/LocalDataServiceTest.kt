@@ -58,7 +58,7 @@ open class LocalDataServiceTest {
         val localData = LocalData(payload = payload, dataMetaInfo = dataMetaInfo, year = year, position = position)
         val savedData = localDataService.save(localData)
 
-        val searchedLocalData = localDataService.findByPositionAndYearAndParameter(position, year, dataMetaInfo.parameterName)
+        val searchedLocalData = localDataService.findLocalData(position, year, dataMetaInfo.parameterName)
 
         Assert.assertNotNull(searchedLocalData)
         val newPayload = arrayOfNulls<Float?>(year.totalHoursInYear()).toMutableList()

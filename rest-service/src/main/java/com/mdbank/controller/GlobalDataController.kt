@@ -20,7 +20,7 @@ class GlobalDataController @Autowired constructor(val globalDataService: GlobalD
     @PreDestroy
     fun deinit() = executorService.shutdown()
 
-    @GetMapping("/from-files")
+    @PostMapping("/from-files")
     @ApiOperation("Обновление всех параметров на основе файлов, лежащих в соответствующей директории")
     fun updateFromFiles(): ResponseEntity<String> {
         executorService.execute { globalDataService.updateFromFiles() }

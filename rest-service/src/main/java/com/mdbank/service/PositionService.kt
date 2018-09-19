@@ -24,7 +24,7 @@ class PositionService @Autowired constructor(globalDataConfig: GlobalDataConfig,
     private val log = LoggerFactory.getLogger(this.javaClass)
 
     @Transactional
-    internal fun initAllPositions() {
+    fun initAllPositions() {
         val minPos = Position(latitude = minLatitude, longitude = minLongitude)
         val maxPos = Position(latitude = maxLatitude, longitude = maxLongitude)
 
@@ -44,7 +44,7 @@ class PositionService @Autowired constructor(globalDataConfig: GlobalDataConfig,
                 }
             }
 
-            repository.saveAll(positions)
+            cachedPositions = repository.saveAll(positions)
         }
     }
 
@@ -55,6 +55,12 @@ class PositionService @Autowired constructor(globalDataConfig: GlobalDataConfig,
     @Transactional(readOnly = true)
     fun getPosition(latitude: Double, longitude: Double): Position? {
         return repository.findByLatitudeAndLongitude(latitude, longitude)
+    }
+
+    @Transactional(readOnly = true)
+    fun getPositionOrThrowException(latitude: Double, longitude: Double): Position {
+        return repository.findByLatitudeAndLongitude(latitude, longitude)
+                ?: throw IllegalArgumentException("Position (lat=$latitude,lon=$longitude doesn't exist")
     }
 
     @Transactional(readOnly = true)

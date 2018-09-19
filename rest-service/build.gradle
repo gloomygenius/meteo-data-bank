@@ -43,7 +43,7 @@ docker {
     dependsOn build
     name "${project.group}/${bootJar.baseName}"
     files bootJar.archivePath
-    buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
+    buildArgs(['JAR_FILE': "${bootJar.baseName}"])
 }
 
 sourceCompatibility = 1.8
@@ -70,6 +70,7 @@ dependencies {
     compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     compile 'org.jetbrains.kotlin:kotlin-reflect'
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    compile 'org.apache.commons:commons-math3:3.6.1'
 
     runtime 'org.postgresql:postgresql:42.2.+'
     compileOnly 'org.springframework.boot:spring-boot-configuration-processor'

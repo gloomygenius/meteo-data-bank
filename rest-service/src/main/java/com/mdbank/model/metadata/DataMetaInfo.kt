@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull
 import javax.persistence.*
 
 @Entity
-class DataMetaInfo(
+open class DataMetaInfo(
         @Id
         @Column(name = "data_meta_info_id")
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "data_meta_info_seq_gen")
